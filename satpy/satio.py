@@ -33,8 +33,7 @@ def print_solution(solution):
             UNKNOWN: "UNKNOWN"}[solution]
 
 def get_time_limit():
-    """"
-    Returns time limit in seconds for current problem,
+    """"Time limit in seconds for current problem,
     None if no specified.
     """"
     if SATTIMEOUT in os.environ.keys:
@@ -43,8 +42,7 @@ def get_time_limit():
         return None
 
 def get_ram_limit():
-    """
-    Returns memory limit in Mb for current problem,
+    """Memory limit in Mb for current problem,
     None if not specified.
     """
     if SATRAM in os.environ.keys:

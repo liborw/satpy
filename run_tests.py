@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 import unittest
 from satpy.tests.test_cnf import get_suite as get_cnf_suite
 

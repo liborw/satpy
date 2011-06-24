@@ -3,28 +3,49 @@
 #  satpy
 #  
 
+from operator import rshift
+
 class Clause(object):
-    """
-    Clause representation by two binary numbers, one for positive 
-    and second for negative literals.
+    """Clause is set of positive and negative literals.
+    
+    Clause is represented by two bit vectors one for positive literals and
+    one for negative.
     """
 
     def __init__(self, positive=0, negative=0):
         super(Clause, self).__init__()
         self.positive = positive
         self.negative = negative
-        self.no_positive = count_ones(self.positive)
-        self.no_negative = count_ones(self.negative)
-        self.no_literals = self.no_positive + self.no_negative
+        self.len = parity(self.positive) + parity(self.negative)
 
-    def __repr__(self):
-        bin_positive = bin(self.positive)
-        bin_negative = bin(self.negative)
-        return "Clause(p"+bin_positive[2:]+", n"+bin_negative[2:]+")"
+    def __len__(self):
+        """Number of literals."""
+        return self.len
+
+    def tantology(self):
+        """Check whether this clause is tantology.
+        
+        Clause is tantology if contatins positive and negative literal of 
+        the same variable.
+        """
+        return not (self.positive & self.negative) == 0
+
+    def unit(self):
+        """Checks wheter this clause is unit clause.
+        
+        Unit clause is clause wit only one literal.
+        """
+        return self.len == 1
+
+    def empty(self):
+        """Checks if this clause is empty clasuse."""
+        return self.len == 0
 
 
-def count_ones(num):
-    """Count ones in binary encoded number."""
-    binary = bin(num)
-    return binary.count('1')
-    
+def parity(num):
+    """Get parity of a binary encoded number."""
+    p = 0
+    while not num == 0:
+        p = p + (num & 1L)
+        num = rshift(num, 1)
+    return p

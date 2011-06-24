@@ -4,18 +4,38 @@
 #  
 
 import unittest
-from satpy.cnf import count_ones
+from satpy.cnf import Clause
+from BitVector import BitVector
 
 class CNFTestCase(unittest.TestCase):
 
-    def test_count_ones(self):
-        self.assertEqual(count_ones(0), 0)
-        self.assertEqual(count_ones(1), 1)
-        self.assertEqual(count_ones(2), 1)
-        self.assertEqual(count_ones(3), 2)
-        self.assertEqual(count_ones(4), 1)
-        self.assertEqual(count_ones(255), 8)
+    def test_empty_clause_len(self):
+        clause = Clause()
+        self.assertEqual(len(clause), 0)
 
+    def test_clause_len(self):
+        clause = Clause(255, 255)
+        self.assertEqual(len(clause), 16)
+
+    def test_tantology(self):
+        clause = Clause(1, 1)
+        self.assertTrue(clause.tantology())
+
+    def test_not_tantology(self):
+        clause = Clause(1, 2)
+        self.assertFalse(clause.tantology())
+
+    def test_unit_clause(self):
+        clause = Clause(2, 0)
+        self.assertTrue(clause.unit())
+
+    def test_not_unit_clause(self):
+        clause = Clause(4, 1)
+        self.assertFalse(clause.unit())
+
+    def test_empty(self):
+        clause = Clause()
+        self.assertTrue(clause.empty())
 
 def get_suite():
     return unittest.TestLoader().loadTestsFromTestCase(CNFTestCase)
